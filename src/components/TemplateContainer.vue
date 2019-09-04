@@ -3,7 +3,6 @@
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
       <p class="uk-h4">Your templates</p>
     </div>
-    <!-- <table class="uk-table uk-table-striped"> -->
     <table class="uk-table uk-table-hover uk-table-divider">
       <thead>
         <tr>
@@ -14,20 +13,26 @@
           <th class="uk-text-center">Glue</th>
         </tr>
       </thead>
-      <!-- <tfoot>
-        <tr>
-          <td>Table Footer</td>
-          <td>Table Footer</td>
-          <td>Table Footer</td>
-        </tr>
-      </tfoot>-->
       <tbody v-for="item in templates" :key="item.id">
-        <tr>
+        <tr class="uk-visible-toggle uk-transition-toggle" tabindex="-1">
           <td>{{item.id}}</td>
           <td>{{item.template.width}}</td>
           <td>{{item.template.height}}</td>
           <td>[ {{item.template.unit}} ]</td>
-          <td>{{formatGlue(item.template.veneer)}}</td>
+          <td>[ {{formatGlue(item.template.veneer) ? formatGlue(item.template.veneer) : 'none' }} ]</td>
+          <td>
+            <div class="uk-width-auto">
+              <ul class="uk-hidden-hover uk-iconnav uk-transition-fade">
+                <li>
+                  <a href="#" uk-icon="icon: pencil"></a>
+                </li>
+
+                <li>
+                  <a href="#" uk-icon="icon: trash"></a>
+                </li>
+              </ul>
+            </div>
+          </td>
         </tr>
       </tbody>
       <!-- {{templates}} -->
@@ -51,13 +56,13 @@ export default {
             key
               .toString()
               .charAt(0)
-              .toUpperCase();
+              .toUpperCase() +
+            "-";
         }
       });
-      if (str.charAt(str.length - 1) === "-") {
+      if (str.charAt(str.length - 1) == "-") {
+        str = str.slice(0, str.length - 1);
       }
-
-      console.log(str);
       return str;
     }
   }

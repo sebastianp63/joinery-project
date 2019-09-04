@@ -3,8 +3,8 @@
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div> -->
-    <router-view/>
+    </div>-->
+    <router-view />
   </div>
 </template>
 
@@ -14,9 +14,7 @@ import Icons from "uikit/dist/js/uikit-icons";
 UIkit.use(Icons);
 UIkit.use(Icons);
 
-export default {
-  
-}
+export default {};
 </script>
 
 <style lang="scss">
@@ -35,7 +33,7 @@ $global-link-color: #da7d02;
 // 4. Import UIkit.
 @import "../node_modules/uikit/src/scss/uikit-theme.scss";
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -52,9 +50,9 @@ $global-link-color: #da7d02;
   }
 }
 
-// html { 
+// html {
 //   opacity: 0.99;
-//   background: url('./assets/home.jpg') no-repeat center center fixed; 
+//   background: url("./assets/home.jpg") no-repeat center center fixed;
 //   -webkit-background-size: cover;
 //   -moz-background-size: cover;
 //   -o-background-size: cover;
