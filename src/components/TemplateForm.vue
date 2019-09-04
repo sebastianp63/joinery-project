@@ -101,7 +101,6 @@ export default {
         maxHeightForMm: 2070
       },
       state: {
-        id: 0,
         width: 100,
         height: 100,
         units: "mm",

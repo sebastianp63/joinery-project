@@ -28,7 +28,7 @@
                 </li>
 
                 <li>
-                  <a href="#" uk-icon="icon: trash"></a>
+                  <a href="#modal-example" uk-toggle uk-icon="icon: trash"></a>
                 </li>
               </ul>
             </div>
@@ -37,6 +37,16 @@
       </tbody>
       <!-- {{templates}} -->
     </table>
+
+    <div id="modal-example" uk-modal>
+      <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Do you want delete this template?</h2>
+        <p class="uk-text-right">
+          <button class="uk-button uk-button-primary uk-modal-close" type="button">Cancel</button>
+          <button class="uk-button uk-button-danger" type="button">Delete</button>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,7 +59,6 @@ export default {
     formatGlue(data) {
       let str = "";
       Object.keys(data).forEach(function(key) {
-        console.log(key, data[key]);
         if (data[key] === true) {
           str =
             str +

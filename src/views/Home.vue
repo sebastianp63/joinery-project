@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <user-header />
-    <my-template />
+    <my-template @emitData="tab.push($event)" />
+    {{tab}}
   </div>
 </template>
 
@@ -14,7 +15,9 @@ import UserHeader from "../components/UserHeader";
 export default {
   name: "home",
   data: function() {
-    return {};
+    return {
+      tab: []
+    };
   },
   components: {
     myTemplate: MyTemplate,

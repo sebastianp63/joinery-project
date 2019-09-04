@@ -4,13 +4,12 @@
   >
     <div class="uk-child-width-expand@s uk-text-center" uk-grid>
       <div class="uk-width-1-3@m">
-        <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate()" />
+        <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate" />
       </div>
       <div class="uk-width-expand@m">
         <template-container :templates="templates" />
       </div>
     </div>
-    {{templateData}}
     <div>{{templates}}</div>
   </div>
 </template>
@@ -18,6 +17,7 @@
 <script>
 import TemplateForm from "@/components/TemplateForm.vue";
 import TemplateContainer from "@/components/TemplateContainer.vue";
+var _ = require("lodash");
 
 export default {
   props: {
@@ -54,7 +54,6 @@ export default {
       this.templateData.veneer.bottom = data.glue.includes("b");
       this.templateData.veneer.left = data.glue.includes("l");
       this.templateData.veneer.right = data.glue.includes("r");
-      console.log(this.templateData);
       // Webpack proxy API
 
       // axios.post('url', order).then((data) => {
@@ -62,12 +61,20 @@ export default {
       // })
     },
 
+    emitData: function() {
+      this.$emit("emitData", this.templateData);
+    },
+
     addNewTemplate() {
-      this.templates.push({ id: this.index, template: this.templateData });
+      this.templates.push({
+        id: this.index,
+        template: _.cloneDeep(this.templateData)
+      });
       // this.$set(this.templates, this.index, this.templateData);
       this.index += 1;
     }
-  }
+  },
+  computed: {}
 };
 </script>
 
