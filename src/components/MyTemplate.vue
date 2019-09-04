@@ -4,12 +4,14 @@
   >
     <div class="uk-child-width-expand@s uk-text-center" uk-grid>
       <div class="uk-width-1-3@m">
-        <template-form />
+        <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate()" />
       </div>
       <div class="uk-width-expand@m">
-        <template-container />
+        <template-container :templates="templates" />
       </div>
     </div>
+    {{templateData}}
+    <div>{{templates}}</div>
   </div>
 </template>
 
@@ -24,7 +26,7 @@ export default {
   name: "MyTemplate",
   data: function() {
     return {
-      isHidden: false,
+      index: 1,
       templateData: {
         width: 100,
         height: 100,
@@ -35,7 +37,8 @@ export default {
           right: false
         },
         unit: "mm"
-      }
+      },
+      templates: []
     };
   },
   components: {
@@ -51,19 +54,18 @@ export default {
       this.templateData.veneer.bottom = data.glue.includes("b");
       this.templateData.veneer.left = data.glue.includes("l");
       this.templateData.veneer.right = data.glue.includes("r");
-
+      console.log(this.templateData);
       // Webpack proxy API
 
       // axios.post('url', order).then((data) => {
       //   alert('Saved')
       // })
     },
-    showData: function(value) {
-      this.width = value;
-      console.log(this.width);
-    },
-    hideTemplate(data) {
-      data ? (this.isHidden = true) : (this.isHidden = false);
+
+    addNewTemplate() {
+      this.templates.push({ id: this.index, template: this.templateData });
+      // this.$set(this.templates, this.index, this.templateData);
+      this.index += 1;
     }
   }
 };
