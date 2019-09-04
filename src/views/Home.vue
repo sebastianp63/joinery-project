@@ -1,8 +1,7 @@
 <template>
   <div class="home">
-    <user-header />
-    <my-template @emitData="tab.push($event)" />
-    {{tab}}
+    <user-header @inputFirstName="firstName = $event" @inputLastName="lastName = $event" />
+    <my-template :firstName="firstName" :lastName="lastName" />
   </div>
 </template>
 
@@ -16,7 +15,9 @@ export default {
   name: "home",
   data: function() {
     return {
-      tab: []
+      firstName: "",
+      lastName: "",
+      templates: []
     };
   },
   components: {

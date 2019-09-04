@@ -10,24 +10,34 @@
         <template-container :templates="templates" />
       </div>
     </div>
-    <div>{{templates}}</div>
+    <div>{{firstName }} {{ lastName}}</div>
   </div>
 </template>
 
 <script>
 import TemplateForm from "@/components/TemplateForm.vue";
 import TemplateContainer from "@/components/TemplateContainer.vue";
+
+import { eventBus } from "../main";
 var _ = require("lodash");
 
 export default {
   props: {
-    id: Number
+    id: Number,
+    firstName: {
+      type: String,
+      default: ""
+    },
+    lastName: {
+      type: String,
+      default: ""
+    }
   },
   name: "MyTemplate",
   data: function() {
     return {
-      index: 1,
       templateData: {
+        id: 1,
         width: 100,
         height: 100,
         veneer: {
@@ -66,15 +76,24 @@ export default {
     },
 
     addNewTemplate() {
-      this.templates.push({
-        id: this.index,
-        template: _.cloneDeep(this.templateData)
-      });
+      this.templates.push(_.cloneDeep(this.templateData));
       // this.$set(this.templates, this.index, this.templateData);
-      this.index += 1;
+      this.templateData.id += 1;
     }
   },
-  computed: {}
+  created() {
+    eventBus.$on("makeOrder", () => {
+      var templates = JSON.stringify(this.templates);
+      var firstName = JSON.stringify(this.firstName);
+      var lastName = JSON.stringify(this.lastName);
+
+      console.log({
+        firstName: firstName,
+        lastName: lastName,
+        templates: templates
+      });
+    });
+  }
 };
 </script>
 

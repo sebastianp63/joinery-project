@@ -4,6 +4,14 @@ import router from './router';
 
 Vue.config.productionTip = false;
 
+export const eventBus = new Vue({
+  methods: {
+    makeOrder() {
+      this.$emit("makeOrder");
+    }
+  }
+});
+
 new Vue({
   router,
   render: h => h(App),

@@ -13,13 +13,13 @@
           <th class="uk-text-center">Glue</th>
         </tr>
       </thead>
-      <tbody v-for="item in templates" :key="item.id">
+      <tbody v-for="(item, i) in templates" :key="item.id">
         <tr class="uk-visible-toggle uk-transition-toggle" tabindex="-1">
           <td>{{item.id}}</td>
-          <td>{{item.template.width}}</td>
-          <td>{{item.template.height}}</td>
-          <td>[ {{item.template.unit}} ]</td>
-          <td>[ {{formatGlue(item.template.veneer) ? formatGlue(item.template.veneer) : 'none' }} ]</td>
+          <td>{{item.width}}</td>
+          <td>{{item.height}}</td>
+          <td>[ {{item.unit}} ]</td>
+          <td>[ {{formatGlue(item.veneer) ? formatGlue(item.veneer) : 'none' }} ]</td>
           <td>
             <div class="uk-width-auto">
               <ul class="uk-hidden-hover uk-iconnav uk-transition-fade">
@@ -35,7 +35,6 @@
           </td>
         </tr>
       </tbody>
-      <!-- {{templates}} -->
     </table>
 
     <div id="modal-example" uk-modal>
@@ -47,10 +46,13 @@
         </p>
       </div>
     </div>
+    <button class="uk-button uk-button-danger" type="button" @click="sendData">Send</button>
   </div>
 </template>
 
 <script>
+import { eventBus } from "../main";
+
 export default {
   name: "templateContainer",
   props: ["templates"],
@@ -73,6 +75,10 @@ export default {
         str = str.slice(0, str.length - 1);
       }
       return str;
+    },
+
+    sendData() {
+      eventBus.makeOrder();
     }
   }
 };
