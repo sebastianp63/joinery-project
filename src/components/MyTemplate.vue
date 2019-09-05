@@ -22,6 +22,7 @@
       <div style="height:1000px">
         <template-container :templates="templates" />
       </div>
+      {{templates}}
     </div>
   </div>
 </template>
@@ -93,8 +94,17 @@ export default {
     },
 
     addNewTemplate() {
-      this.templates.push(_.cloneDeep(this.templateData));
+      // this.templates.push(_.cloneDeep(this.templateData));
       // this.$set(this.templates, _.cloneDeep(this.templateData));
+
+      let exist = this.templates.filter(el => {
+        return el.id == this.templateData.id;
+      });
+      if (!exist.length > 0) {
+        this.templates.push(_.cloneDeep(this.templateData));
+      } else {
+        console.log("this themplate has been already exist");
+      }
       this.templateData.id += 1;
     }
   },

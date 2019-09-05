@@ -64,7 +64,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 10px;
-  grid-auto-rows: minmax(37.5px, auto);
+  grid-auto-rows: minmax(37.5spx, auto);
 
   div {
     position: relative;

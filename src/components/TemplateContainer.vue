@@ -13,9 +13,9 @@
           <th class="uk-text-center">Glue</th>
         </tr>
       </thead>
-      <tbody v-for="(item, i) in templates" :key="item.id">
+      <tbody v-for="(item, i) in templates" :key="i+1">
         <tr class="uk-visible-toggle uk-transition-toggle" tabindex="-1">
-          <td>{{item.id}}</td>
+          <td>{{i + 1}}</td>
           <td>{{item.width}}</td>
           <td>{{item.height}}</td>
           <td>[ {{item.unit}} ]</td>
