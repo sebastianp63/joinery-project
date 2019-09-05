@@ -5,20 +5,18 @@
         <p class="uk-h4">Template preview</p>
       </div>
       <div class="wrapper">
-        <div class="one">
+        <div class="top">
           <p
             class="width-text uk-text-large uk-text-secondary uk-text-bold"
           >{{templateData.width}} {{templateData.unit}}</p>
         </div>
-        <div class="two"></div>
-        <div class="three"></div>
-        <div class="four">
+        <div class="left">
           <p
             class="height-text uk-text-large uk-text-secondary uk-text-bold"
           >{{templateData.height}} {{templateData.unit}}</p>
         </div>
         <div
-          class="bord five"
+          class="bord center"
           v-bind:class="{ 
       'top-border': templateData.veneer.top ,
       'bottom-border': templateData.veneer.bottom,
@@ -44,12 +42,11 @@ export default {
 * {
   box-sizing: border-box;
 }
-.wrapper {
-  max-width: 940px;
-  margin: 0 auto;
 
+.wrapper {
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-gap: 10px;
   grid-auto-rows: minmax(100px, auto);
 
@@ -71,7 +68,7 @@ export default {
 }
 
 .height-text {
-  width: 100%;
+  width: 200px;
   position: absolute;
   top: 50%;
   left: 100%;
@@ -79,63 +76,18 @@ export default {
   transform-origin: 0 0;
 }
 
-.one {
-  grid-column: 2 / 4;
+.top {
+  grid-column: 2 / 7;
   grid-row: 1 / 2;
 }
-.two {
-  grid-column: 4 / 5;
-  grid-row: 2 / 4;
-}
-.three {
-  grid-column: 2/4;
-  grid-row: 4 / 5;
-}
-.four {
+
+.left {
   grid-column: 1 /2;
   grid-row: 2/ 4;
 }
-.five {
-  grid-column: 2 / 4;
+.center {
+  grid-column: 2 / 7;
   grid-row: 2 / 4;
-}
-
-.vertical-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-.btn-top {
-  position: absolute;
-  height: 60px;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-
-.btn-right {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 60px;
-
-  height: 100%;
-}
-
-.btn-bottom {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50px;
-}
-
-.btn-left {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 60px;
-  height: 100%;
 }
 
 .top-border {

@@ -3,12 +3,15 @@
     class="uk-margin-small-left uk-margin-small-right border-template .uk-background-default uk-align-center uk-padding-small"
   >
     <div class="uk-child-width-expand@s uk-text-center" uk-grid>
-      <div class="uk-flex-first uk-width-1-3@m" style="max-height: 600px">
-        <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate" />
+      <div class="uk-width-1-3@m uk-text-center">
+        <div>
+          <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate" />
+        </div>
+        <div>
+          <template-preview v-bind:templateData="templateData"></template-preview>
+        </div>
       </div>
-      <div class="uk-width-2-3@m">
-        <template-preview v-bind:templateData="templateData"></template-preview>
-      </div>
+
       <div class="uk-width-expand@m">
         <template-container :templates="templates" />
       </div>
