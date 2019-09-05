@@ -1,6 +1,6 @@
 <template>
   <div class="uk-card uk-card-default uk-card-body">
-    <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
+    <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-medium-bottom">
       <p class="uk-h4">Create your template</p>
     </div>
     <form class="uk-form-stacked">
@@ -80,6 +80,7 @@
         </div>
       </div>
     </form>
+    
     <div class="button-wraper">
       <button
         @click="showPreview"

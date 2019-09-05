@@ -3,8 +3,8 @@
     class="border-template .uk-background-default uk-align-center uk-padding-small uk-margin-medium-left uk-margin-medium-right"
     style=" min-height: 85vh"
   >
-    <div class="uk-grid-small uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
-      <div class="uk-width-1-3@m uk-text-center">
+    <div class="uk-grid-small uk-child-width-expand@s  uk-height-1-1" uk-grid>
+      <div class="uk-width-1-3@m ">
         <div>
           <template-form
             @showPreview="shown = $event "
@@ -20,9 +20,9 @@
       </div>
 
       <div style="height:1000px">
-        <template-container :templates="templates" />
+        <template-container :templates="templates"
+        @removeRow="removeTemplate($event)" />
       </div>
-      {{templates}}
     </div>
   </div>
 </template>
@@ -37,6 +37,8 @@ import { eventBus } from "../main";
 const _ = require("lodash");
 const axios = require("axios");
 
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
 export default {
   props: {
     id: Number,
@@ -49,10 +51,12 @@ export default {
       default: ""
     }
   },
+
   name: "MyTemplate",
   data: function() {
     return {
       shown: false,
+      templates: [],
       templateData: {
         id: 1,
         width: 100,
@@ -65,14 +69,15 @@ export default {
         },
         unit: "mm"
       },
-      templates: []
     };
   },
+
   components: {
     templateForm: TemplateForm,
     templateContainer: TemplateContainer,
     templatePreview: TemplatePreview
   },
+
   methods: {
     onTemplateUpdate(data) {
       this.templateData.width = data.width;
@@ -93,10 +98,7 @@ export default {
       this.$emit("emitData", this.templateData);
     },
 
-    addNewTemplate() {
-      // this.templates.push(_.cloneDeep(this.templateData));
-      // this.$set(this.templates, _.cloneDeep(this.templateData));
-
+    addNewTemplate: function() {
       let exist = this.templates.filter(el => {
         return el.id == this.templateData.id;
       });
@@ -106,8 +108,20 @@ export default {
         console.log("this themplate has been already exist");
       }
       this.templateData.id += 1;
-    }
+    }, 
+
+    removeTemplate: function(index){
+        const indexItemToRemove = index - 1;
+        this.templates.splice(indexItemToRemove, 1);
+        this.templateData.id = index;
+        for (let i = indexItemToRemove; i < this.templates.length; i++) {
+          this.templates[i].id = this.templateData.id;
+          if (this.templateData.id < this.templates.length ) this.templateData.id++;
+        }
+       
+    },
   },
+  
   mounted() {
     eventBus.$on("makeOrder", () => {
       let obj = {};

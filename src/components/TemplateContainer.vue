@@ -13,9 +13,9 @@
           <th class="uk-text-center">Glue</th>
         </tr>
       </thead>
-      <tbody v-for="(item, i) in templates" :key="i+1">
-        <tr class="uk-visible-toggle uk-transition-toggle" tabindex="-1">
-          <td>{{i + 1}}</td>
+      <tbody v-if="templates.length > 0">
+        <tr v-for="(item, i) in templates" :key="i+1" class="uk-visible-toggle uk-transition-toggle" tabindex="-1">
+          <td>{{i + 1 }}</td>
           <td>{{item.width}}</td>
           <td>{{item.height}}</td>
           <td>[ {{item.unit}} ]</td>
@@ -27,7 +27,7 @@
                   <a href="#" uk-icon="icon: pencil"></a>
                 </li>
                 <li>
-                  <a href="#modal-example" uk-toggle uk-icon="icon: trash"></a>
+                  <a @click="indexRow = i + 1" href="#modal-example" uk-toggle uk-icon="icon: trash"></a>
                 </li>
               </ul>
             </div>
@@ -41,12 +41,13 @@
         <h2 class="uk-modal-title">Do you want delete this template?</h2>
         <p class="uk-text-right">
           <button class="uk-button uk-button-primary uk-modal-close" type="button">Cancel</button>
-          <button class="uk-button uk-button-danger" type="button">Delete</button>
+          <button @click = "$emit('removeRow',indexRow)" class="uk-button uk-button-danger uk-modal-close" type="button">Delete</button>
         </p>
       </div>
     </div>
 
     <button class="uk-button uk-button-danger" type="button" @click="sendData">Send</button>
+
   </div>
 </template>
 
@@ -56,6 +57,14 @@ import { eventBus } from "../main";
 export default {
   name: "templateContainer",
   props: ["templates"],
+  data() {
+    return { 
+      indexRow: {
+        type: Number,
+        default: null
+      }
+    }
+  },
 
   methods: {
     formatGlue(data) {
@@ -88,5 +97,13 @@ export default {
 <style lang="scss" scoped>
 .uk-card {
   min-height: 100%;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

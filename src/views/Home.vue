@@ -17,7 +17,6 @@ export default {
     return {
       firstName: "",
       lastName: "",
-      templates: []
     };
   },
   components: {
