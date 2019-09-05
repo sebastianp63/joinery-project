@@ -1,7 +1,7 @@
 <template>
   <div class="uk-card uk-card-default uk-card-body">
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
-      <p class="uk-h4">Your templates</p>
+      <p class="uk-h4">Created templates</p>
     </div>
     <table class="uk-table uk-table-hover uk-table-divider">
       <thead>

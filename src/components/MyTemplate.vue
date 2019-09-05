@@ -3,23 +3,28 @@
     class="uk-margin-small-left uk-margin-small-right border-template .uk-background-default uk-align-center uk-padding-small"
   >
     <div class="uk-child-width-expand@s uk-text-center" uk-grid>
-      <div class="uk-width-1-3@m">
+      <div class="uk-flex-first uk-width-1-3@m" style="max-height: 600px">
         <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate" />
+      </div>
+      <div class="uk-width-2-3@m">
+        <template-preview v-bind:templateData="templateData"></template-preview>
       </div>
       <div class="uk-width-expand@m">
         <template-container :templates="templates" />
       </div>
     </div>
-    <div>{{firstName }} {{ lastName}}</div>
   </div>
 </template>
 
 <script>
 import TemplateForm from "@/components/TemplateForm.vue";
 import TemplateContainer from "@/components/TemplateContainer.vue";
+import TemplatePreview from "@/components/TemplatePreview.vue";
 
 import { eventBus } from "../main";
-var _ = require("lodash");
+
+const _ = require("lodash");
+const axios = require("axios");
 
 export default {
   props: {
@@ -49,11 +54,16 @@ export default {
         unit: "mm"
       },
       templates: []
+      // templates: {
+      //   type: Array,
+      //   default: []
+      // }
     };
   },
   components: {
     templateForm: TemplateForm,
-    templateContainer: TemplateContainer
+    templateContainer: TemplateContainer,
+    templatePreview: TemplatePreview
   },
   methods: {
     onTemplateUpdate(data) {
@@ -77,21 +87,26 @@ export default {
 
     addNewTemplate() {
       this.templates.push(_.cloneDeep(this.templateData));
-      // this.$set(this.templates, this.index, this.templateData);
+      // this.$set(this.templates, _.cloneDeep(this.templateData));
       this.templateData.id += 1;
     }
   },
-  created() {
+  mounted() {
     eventBus.$on("makeOrder", () => {
-      var templates = JSON.stringify(this.templates);
-      var firstName = JSON.stringify(this.firstName);
-      var lastName = JSON.stringify(this.lastName);
+      let obj = {};
+      (obj.firstName = this.firstName),
+        (obj.lastName = this.lastName),
+        (obj.templates = this.templates);
+      let order = JSON.stringify(obj);
 
-      console.log({
-        firstName: firstName,
-        lastName: lastName,
-        templates: templates
-      });
+      axios
+        .post("/user", order)
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     });
   }
 };
