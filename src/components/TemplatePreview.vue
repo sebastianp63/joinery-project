@@ -27,6 +27,22 @@
       </div>
     </div>
   </div>
+
+  <!--  <div class="uk-inline uk-margin">
+    <img src="../assets/home.jpg" alt />
+
+    <div class="uk-position-top uk-overlay uk-overlay-default uk-text-center">Top</div>
+    <div class="uk-position-bottom uk-overlay uk-overlay-default uk-text-center">Bottom</div>
+    <div class="uk-position-left uk-overlay uk-overlay-default uk-flex uk-flex-middle">Left</div>
+    <div class="uk-position-right uk-overlay uk-overlay-default uk-flex uk-flex-middle">Right</div>
+  </div>-->
+
+  <!-- <div class="uk-inline">
+    <img src="../assets/home.jpg" alt />
+
+    <div class="uk-position-center-left-out uk-overlay uk-overlay-primary uk-visible@s">Out</div>
+    <div class="uk-position-center-right-out uk-overlay uk-overlay-primary uk-visible@s">Out</div>
+  </div>-->
 </template>
 
 <script>
@@ -48,7 +64,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 10px;
-  grid-auto-rows: minmax(100px, auto);
+  grid-auto-rows: minmax(37.5px, auto);
 
   div {
     position: relative;
@@ -83,11 +99,11 @@ export default {
 
 .left {
   grid-column: 1 /2;
-  grid-row: 2/ 4;
+  grid-row: 2/ 7;
 }
 .center {
   grid-column: 2 / 7;
-  grid-row: 2 / 4;
+  grid-row: 2 / 7;
 }
 
 .top-border {

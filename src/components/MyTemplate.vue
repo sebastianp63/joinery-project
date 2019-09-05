@@ -1,8 +1,9 @@
 <template>
   <div
-    class="uk-margin-small-left uk-margin-small-right border-template .uk-background-default uk-align-center uk-padding-small"
+    class="border-template .uk-background-default uk-align-center uk-padding-small uk-margin-medium-left uk-margin-medium-right"
+    style=" min-height: 85vh"
   >
-    <div class="uk-child-width-expand@s uk-text-center" uk-grid>
+    <div class="uk-grid-small uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
       <div class="uk-width-1-3@m uk-text-center">
         <div>
           <template-form
@@ -11,12 +12,14 @@
             @addTemplate="addNewTemplate"
           />
         </div>
-        <div v-show="shown">
-          <template-preview v-bind:templateData="templateData"></template-preview>
+        <div class="uk-margin-top">
+          <transition name="fade">
+            <template-preview v-show="shown" v-bind:templateData="templateData"></template-preview>
+          </transition>
         </div>
       </div>
 
-      <div class="uk-width-expand@m">
+      <div style="height:1000px">
         <template-container :templates="templates" />
       </div>
     </div>
@@ -122,5 +125,17 @@ export default {
 }
 * {
   box-sizing: border-box;
+}
+
+.max-h {
+  height: 100%;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

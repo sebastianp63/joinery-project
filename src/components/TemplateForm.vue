@@ -1,10 +1,8 @@
 <template>
   <div class="uk-card uk-card-default uk-card-body">
-    <!-- <h3 class="uk-card-title">Temaplate details</h3> -->
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
       <p class="uk-h4">Create your template</p>
     </div>
-    <!-- <form class=" uk-text-left uk-form-horizontal uk-margin-large ">  -->
     <form class="uk-form-stacked">
       <div class="uk-margin">
         <label class="uk-form-label label-text" for="form-width">Width:</label>
