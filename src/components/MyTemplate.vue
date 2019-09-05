@@ -5,9 +5,13 @@
     <div class="uk-child-width-expand@s uk-text-center" uk-grid>
       <div class="uk-width-1-3@m uk-text-center">
         <div>
-          <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate" />
+          <template-form
+            @showPreview="shown = $event "
+            @onUpdated="onTemplateUpdate"
+            @addTemplate="addNewTemplate"
+          />
         </div>
-        <div>
+        <div v-show="shown">
           <template-preview v-bind:templateData="templateData"></template-preview>
         </div>
       </div>
@@ -44,6 +48,7 @@ export default {
   name: "MyTemplate",
   data: function() {
     return {
+      shown: false,
       templateData: {
         id: 1,
         width: 100,
@@ -57,10 +62,6 @@ export default {
         unit: "mm"
       },
       templates: []
-      // templates: {
-      //   type: Array,
-      //   default: []
-      // }
     };
   },
   components: {
@@ -103,7 +104,7 @@ export default {
       let order = JSON.stringify(obj);
 
       axios
-        .post("/user", order)
+        .post("/api/save/order", order)
         .then(function(response) {
           console.log(response);
         })

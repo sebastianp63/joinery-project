@@ -83,7 +83,10 @@
       </div>
     </form>
     <div class="button-wraper">
-      <button class="uk-button uk-button-primary">Preview</button>
+      <button
+        @click="showPreview"
+        class="uk-button uk-button-primary"
+      >{{ isShowedPreview ? "Hide Preview": "Show Preview"}}</button>
       <button @click="addTemplate" class="uk-button uk-button-secondary">Add template</button>
     </div>
   </div>
@@ -96,6 +99,7 @@ export default {
   name: "templateForm",
   data() {
     return {
+      isShowedPreview: false,
       validateData: {
         maxWidthForCm: 280,
         maxHeightForCm: 207,
@@ -161,6 +165,10 @@ export default {
     },
     addTemplate: function(event) {
       this.$emit("addTemplate");
+    },
+    showPreview: function(event) {
+      this.isShowedPreview = !this.isShowedPreview;
+      this.$emit("showPreview", this.isShowedPreview);
     }
   }
 };

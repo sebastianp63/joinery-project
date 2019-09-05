@@ -26,7 +26,6 @@
                 <li>
                   <a href="#" uk-icon="icon: pencil"></a>
                 </li>
-
                 <li>
                   <a href="#modal-example" uk-toggle uk-icon="icon: trash"></a>
                 </li>
@@ -46,6 +45,7 @@
         </p>
       </div>
     </div>
+
     <button class="uk-button uk-button-danger" type="button" @click="sendData">Send</button>
   </div>
 </template>
