@@ -7,11 +7,13 @@
       <div class="wrapper">
         <div class="top">
           <p
+            v-if="templateData.width"
             class="width-text uk-text-large uk-text-secondary uk-text-bold"
           >{{templateData.width}} {{templateData.unit}}</p>
         </div>
         <div class="left">
           <p
+            v-if="templateData.height"
             class="height-text uk-text-large uk-text-secondary uk-text-bold"
           >{{templateData.height}} {{templateData.unit}}</p>
         </div>

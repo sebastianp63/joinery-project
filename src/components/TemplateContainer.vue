@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-card uk-card-default uk-card-body">
+  <div class="uk-card uk-card-default uk-card-body uk-height-1-1">
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
       <p class="uk-h4">Created templates</p>
     </div>
@@ -14,8 +14,13 @@
         </tr>
       </thead>
       <tbody v-if="templates.length > 0">
-        <tr v-for="(item, i) in templates" :key="i+1" class="uk-visible-toggle uk-transition-toggle" tabindex="-1">
-          <td>{{i + 1 }}</td>
+        <tr
+          v-for="(item, i) in templates"
+          :key="i+1"
+          class="uk-visible-toggle uk-transition-toggle"
+          tabindex="-1"
+        >
+          <td>{{i + 1 }} - {{item.id}}</td>
           <td>{{item.width}}</td>
           <td>{{item.height}}</td>
           <td>[ {{item.unit}} ]</td>
@@ -27,7 +32,12 @@
                   <a href="#" uk-icon="icon: pencil"></a>
                 </li>
                 <li>
-                  <a @click="indexRow = i + 1" href="#modal-example" uk-toggle uk-icon="icon: trash"></a>
+                  <a
+                    @click="indexRow = i + 1"
+                    href="#modal-example"
+                    uk-toggle
+                    uk-icon="icon: trash"
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -40,14 +50,20 @@
       <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">Do you want delete this template?</h2>
         <p class="uk-text-right">
-          <button class="uk-button uk-button-primary uk-modal-close" type="button">Cancel</button>
-          <button @click = "$emit('removeRow',indexRow)" class="uk-button uk-button-danger uk-modal-close" type="button">Delete</button>
+          <button
+            class="uk-button uk-button-primary uk-modal-close uk-margin-right"
+            type="button"
+          >Cancel</button>
+          <button
+            @click="$emit('removeRow',indexRow)"
+            class="uk-button uk-button-danger uk-modal-close"
+            type="button"
+          >Delete - {{indexRow}}</button>
         </p>
       </div>
     </div>
 
     <button class="uk-button uk-button-danger" type="button" @click="sendData">Send</button>
-
   </div>
 </template>
 
@@ -58,12 +74,12 @@ export default {
   name: "templateContainer",
   props: ["templates"],
   data() {
-    return { 
+    return {
       indexRow: {
         type: Number,
         default: null
       }
-    }
+    };
   },
 
   methods: {

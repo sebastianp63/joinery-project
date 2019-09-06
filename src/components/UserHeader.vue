@@ -1,13 +1,14 @@
 <template>
   <div
-    class=" uk-width-3-4 uk-align-center uk-background-secondary uk-padding-small uk-background-primary uk-margin-medium-top"
+    class="uk-width-3-4 uk-align-center uk-background-secondary uk-padding-small uk-background-primary uk-margin-medium-top"
   >
     <div class="uk-child-width-expand@s" uk-grid>
       <form action class="uk-form-horizontal">
-        <label class="text-label uk-form-label" for="first-name-template">First name:</label>
+        <label class="text-label uk-form-label" for="first-name-template">First name: {{firstName}}</label>
         <div class="uk-form-controls">
           <input
             @input="getFirstName"
+            v-model="firstName"
             class="uk-input"
             id="first-name-template"
             type="text"
@@ -16,10 +17,11 @@
         </div>
       </form>
       <form action class="uk-form-horizontal">
-        <label class="text-label uk-form-label" for="last-name-template">Last name:</label>
+        <label class="text-label uk-form-label" for="last-name-template">Last name: {{lastName}}</label>
         <div class="uk-form-controls">
           <input
             @input="getLastName"
+            v-model="lastName"
             class="uk-input"
             id="last-name-template"
             type="text"
@@ -34,26 +36,37 @@
 <script>
 export default {
   name: "UserHeader",
-  props: {
-    firstName: String,
-    lastName: String
+  data() {
+    return {
+      firstName: "",
+      lastName: ""
+    };
   },
   methods: {
-    getFirstName(e) {
-      this.$emit("inputFirstName", e.target.value);
+    getFirstName() {
+      var letters = /^[A-Za-z]+$/;
+      if (this.firstName.match(letters)) {
+        this.$emit("inputFirstName", this.firstName);
+      } else {
+        console.log("incorrect value");
+      }
     },
-    getLastName(e) {
-      this.$emit("inputLastName", e.target.value);
+    getLastName() {
+      var letters = /^[A-Za-z]+$/;
+      if (this.lastName.match(letters)) {
+        this.$emit("inputLastName", this.lastName);
+      } else {
+        console.log("incorrect value");
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  .text-label {
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-
-  }
+.text-label {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
 </style>

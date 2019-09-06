@@ -7,14 +7,26 @@
       <div class="uk-margin">
         <label class="uk-form-label label-text" for="form-width">Width:</label>
         <div class="uk-form-controls">
-          <input class="uk-input" id="form-width" type="number" v-model="state.width" />
+          <input
+            class="uk-input"
+            id="form-width"
+            type="number"
+            v-model="state.width"
+            @keypress="isNumber($event)"
+          />
         </div>
       </div>
 
       <div class="uk-margin">
         <label class="uk-form-label label-text" for="form-height">Height:</label>
         <div class="uk-form-controls">
-          <input class="uk-input" id="form-height" type="number" v-model="state.height" />
+          <input
+            class="uk-input"
+            id="form-height"
+            type="number"
+            v-model="state.height"
+            @keypress="isNumber($event)"
+          />
         </div>
       </div>
 
@@ -80,7 +92,7 @@
         </div>
       </div>
     </form>
-    
+
     <div class="button-wraper">
       <button
         @click="showPreview"
@@ -98,6 +110,7 @@ export default {
   name: "templateForm",
   data() {
     return {
+      max: 2,
       isShowedPreview: false,
       validateData: {
         maxWidthForCm: 280,
@@ -116,12 +129,23 @@ export default {
   watch: {
     state: {
       handler(old, val) {
+        const reg = new RegExp("^([1-9]|[1-9]d+)$");
+        const test = reg.test(val.height);
+
         if (val.height < 0) {
           val.height = 0;
         }
 
         if (val.width < 0) {
           val.width = 0;
+        }
+
+        if (val.width.toString().charAt(0) == 0) {
+          val.width = "";
+        }
+
+        if (val.height.toString().charAt(0) == 0) {
+          val.height = "";
         }
 
         if (val.width > this.validateData.maxWidthForCm && val.units === "cm") {
@@ -168,6 +192,14 @@ export default {
     showPreview: function(event) {
       this.isShowedPreview = !this.isShowedPreview;
       this.$emit("showPreview", this.isShowedPreview);
+    },
+    isNumber($event) {
+      //console.log($event.keyCode); //keyCodes value
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        // 46 is dot
+        $event.preventDefault();
+      }
     }
   }
 };
