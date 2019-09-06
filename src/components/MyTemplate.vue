@@ -23,6 +23,8 @@
         <template-container :templates="templates" @removeRow="removeTemplate($event)" />
       </div>
     </div>
+    <p>{{templateData.id}}</p>
+    {{templates}}
   </div>
 </template>
 
@@ -116,10 +118,11 @@ export default {
     removeTemplate: function(index) {
       const indexItemToRemove = index - 1;
       this.templates.splice(indexItemToRemove, 1);
+      debugger;
       this.templateData.id = index;
       for (let i = indexItemToRemove; i < this.templates.length; i++) {
         this.templates[i].id = this.templateData.id;
-        if (this.templateData.id < this.templates.length)
+        if (this.templateData.id <= this.templates.length)
           this.templateData.id++;
       }
     }

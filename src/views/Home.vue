@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <user-header @inputFirstName="firstName = $event" @inputLastName="lastName = $event" />
-
     <my-template :firstName="firstName" :lastName="lastName" />
   </div>
 </template>
