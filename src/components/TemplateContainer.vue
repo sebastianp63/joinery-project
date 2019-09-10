@@ -1,7 +1,7 @@
 <template>
   <div class="uk-card uk-card-default uk-card-body uk-height-1-1">
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
-      <p class="uk-h4">Created templates {{currentPage}}</p>
+      <p class="uk-h4">Created templates - Page {{currentPage}}</p>
     </div>
     <table class="uk-table uk-table-hover uk-table-divider">
       <thead>
@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(item, i) in visibleTemplates"
+          v-for="(item) in visibleTemplates"
           :key="item.id"
           class="uk-visible-toggle uk-transition-toggle"
           tabindex="-1"
@@ -33,7 +33,7 @@
                 </li>
                 <li>
                   <a
-                    @click="indexRow = i + 1"
+                    @click="indexRow = item.id"
                     href="#modal-example"
                     uk-toggle
                     uk-icon="icon: trash"
@@ -74,13 +74,12 @@
         @loadPage="pageChangeHandle"
       ></pagination-template>
     </div>
-    {{currentPage}} - {{pageCount}}
   </div>
 </template>
 
 <script>
 import { eventBus } from "../main";
-import Pagination from "./Pagination";
+import Pagination from "./pagination/Pagination";
 
 export default {
   name: "templateContainer",
@@ -90,9 +89,9 @@ export default {
   },
   data() {
     return {
-      currentPage: 0,
+      currentPage: 1,
       pageSize: 10,
-      pageCount: 1,
+      pageCount: 0,
       visibleTemplates: [],
       indexRow: {
         type: Number,
@@ -133,9 +132,10 @@ export default {
           this.currentPage = value;
       }
 
-      const from = this.currentPage * this.pageSize;
+      const from = (this.currentPage - 1) * this.pageSize;
       const to = from + this.pageSize;
       this.visibleTemplates = this.templates.slice(from, to);
+
     },
 
     sendData() {
@@ -143,9 +143,10 @@ export default {
     },
     getTemp() {}
   },
+  
   watch: {
     templates: function() {
-      const from = this.currentPage * this.pageSize;
+      const from = (this.currentPage - 1) * this.pageSize;
       const to = from + this.pageSize;
       this.visibleTemplates = this.templates.slice(from, to);
       this.pageCount = Math.ceil(this.templates.length / this.pageSize);
@@ -153,7 +154,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 .uk-card {

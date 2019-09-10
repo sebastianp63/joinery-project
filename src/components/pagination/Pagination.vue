@@ -5,6 +5,7 @@
         <span uk-pagination-previous></span>
       </a>
     </li>
+
     <BasePaginationTrigger
       v-for="paginationTrigger in paginationTriggers"
       :key="paginationTrigger"
@@ -16,10 +17,6 @@
       @loadPage="onLoadPage"
     ></BasePaginationTrigger>
 
-    <!-- <li v-for="paginationTrigger in paginationTriggers" :key="paginationTrigger">
-      <a @click="onClick">{{paginationTrigger}}</a>
-    </li>-->
-
     <li v-show="isNextButtonDisabled">
       <a @click="nextPage">
         <span uk-pagination-next></span>
@@ -30,6 +27,8 @@
 
 <script>
 import BasePaginationTrigger from "./BasePaginationTrigger";
+
+const _ = require("lodash");
 export default {
   props: {
     visiblePagesCount: {
@@ -55,40 +54,42 @@ export default {
     isNextButtonDisabled() {
       return !(this.currentPage === this.pageCount);
     },
-
     paginationTriggers() {
-      const currentPage = this.currentPage;
-      const pageCount = this.pageCount;
-      const visiblePagesCount = this.visiblePagesCount;
-      const visiblePagesThreshold = (visiblePagesCount - 1) / 2;
-      const pagintationTriggersArray = Array(this.visiblePagesCount - 1).fill(
-        0
-      );
+      if(this.pageCount >= this.visiblePagesCount){
 
-      if (currentPage <= visiblePagesThreshold + 1) {
-        pagintationTriggersArray[0] = 1;
-        const pagintationTriggers = pagintationTriggersArray.map(
-          (paginationTrigger, index) => {
-            return pagintationTriggersArray[0] + index;
-          }
+        const currentPage = this.currentPage;
+        const pageCount = this.pageCount;
+        const visiblePagesCount = this.visiblePagesCount;
+        const visiblePagesThreshold = (visiblePagesCount - 1) / 2;
+        const pagintationTriggersArray = Array(this.visiblePagesCount - 1).fill(
+          0
         );
-
-        pagintationTriggers.push(pageCount);
-
-        return pagintationTriggers;
-      }
-
-      if (currentPage >= pageCount - visiblePagesThreshold + 1) {
-        const pagintationTriggers = pagintationTriggersArray.map(
-          (paginationTrigger, index) => {
-            return pageCount - index;
-          }
-        );
-
-        pagintationTriggers.reverse().unshift(1);
-
-        return pagintationTriggers;
-      }
+  
+        if (currentPage <= visiblePagesThreshold + 1) {
+          pagintationTriggersArray[0] = 1;
+          const pagintationTriggers = pagintationTriggersArray.map(
+            (paginationTrigger, index) => {
+              return pagintationTriggersArray[0] + index;
+            }
+          );
+  
+          pagintationTriggers.push(pageCount);
+  
+          return pagintationTriggers;
+        }
+  
+        if (currentPage >= pageCount - visiblePagesThreshold + 1) {
+          const pagintationTriggers = pagintationTriggersArray.map(
+            (paginationTrigger, index) => {
+              return pageCount - index;
+            }
+          );
+  
+          pagintationTriggers.reverse().unshift(1);
+  
+          return pagintationTriggers;
+        }
+      
 
       pagintationTriggersArray[0] = currentPage - visiblePagesThreshold + 1;
       const pagintationTriggers = pagintationTriggersArray.map(
@@ -101,6 +102,8 @@ export default {
       pagintationTriggers[pagintationTriggers.length - 1] = pageCount;
 
       return pagintationTriggers;
+      }         else return ([...Array(this.pageCount).keys()].map(x => x=x+1))
+
     }
   },
   methods: {

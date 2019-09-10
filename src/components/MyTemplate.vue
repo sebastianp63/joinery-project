@@ -23,8 +23,6 @@
         <template-container :templates="templates" @removeRow="removeTemplate($event)" />
       </div>
     </div>
-    <!-- <p>{{templateData.id}}</p>
-    {{templates}}-->
   </div>
 </template>
 
@@ -99,18 +97,20 @@ export default {
     },
 
     addNewTemplate: function() {
-      if (this.templateData.height == 0 || this.templateData.width == 0) {
-        console.log("Cannot add template with no dimension");
-      } else {
-        let exist = this.templates.filter(el => {
-          return el.id == this.templateData.id;
-        });
-        if (!exist.length > 0) {
-          this.templates.push(_.cloneDeep(this.templateData));
+      if(this.templates.length < 100){
+        if (this.templateData.height == 0 || this.templateData.width == 0) {
+          console.log("Cannot add template with no dimension");
         } else {
-          console.log("this themplate has been already exist");
+          let exist = this.templates.filter(el => {
+            return el.id == this.templateData.id;
+          });
+          if (!exist.length > 0) {
+            this.templates.push(_.cloneDeep(this.templateData));
+          } else {
+            console.log("this themplate has been already exist");
+          }
+          this.templateData.id += 1;
         }
-        this.templateData.id += 1;
       }
     },
 
@@ -130,13 +130,14 @@ export default {
     eventBus.$on("makeOrder", () => {
       let obj = {};
       if (
-        this.firstName == "" ||
+        this.firstName === "" ||
         this.firstName.length < 3 ||
-        this.lastName == "" ||
-        this.lastName.length
+        this.lastName === "" ||
+        this.lastName.length < 3 || _.isEmpty(this.templates)  
       ) {
         console.log("invalid user data");
       }
+      else {
       obj.firstName = this.firstName;
       obj.lastName = this.lastName;
       obj.templates = this.templates;
@@ -150,6 +151,7 @@ export default {
           console.log(response);
         })
         .catch(function(error) {});
+      }
     });
   }
 };
@@ -171,7 +173,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to  {
   opacity: 0;
 }
 </style>

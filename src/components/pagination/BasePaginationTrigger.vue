@@ -2,7 +2,6 @@
   <li>
     <a @click="onClick">{{ pageNumber }}</a>
   </li>
-  <!-- <span class="base-pagination-trigger" </span> -->
 </template>
 
 <script>
