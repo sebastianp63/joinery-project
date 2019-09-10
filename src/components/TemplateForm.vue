@@ -110,7 +110,6 @@ export default {
   name: "templateForm",
   data() {
     return {
-      max: 2,
       isShowedPreview: false,
       validateData: {
         maxWidthForCm: 280,

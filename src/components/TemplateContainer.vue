@@ -1,7 +1,7 @@
 <template>
   <div class="uk-card uk-card-default uk-card-body uk-height-1-1">
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-small-bottom">
-      <p class="uk-h4">Created templates</p>
+      <p class="uk-h4">Created templates {{currentPage}}</p>
     </div>
     <table class="uk-table uk-table-hover uk-table-divider">
       <thead>
@@ -13,14 +13,14 @@
           <th class="uk-text-center">Glue</th>
         </tr>
       </thead>
-      <tbody v-if="templates.length > 0">
+      <tbody>
         <tr
-          v-for="(item, i) in templates"
-          :key="i+1"
+          v-for="(item, i) in visibleTemplates"
+          :key="item.id"
           class="uk-visible-toggle uk-transition-toggle"
           tabindex="-1"
         >
-          <td>{{i + 1 }} - {{item.id}}</td>
+          <td>{{item.id}}</td>
           <td>{{item.width}}</td>
           <td>{{item.height}}</td>
           <td>[ {{item.unit}} ]</td>
@@ -64,17 +64,36 @@
     </div>
 
     <button class="uk-button uk-button-danger" type="button" @click="sendData">Send</button>
+    <div class="uk-position-bottom">
+      <pagination-template
+        v-show="pageCount>1"
+        :current-page="currentPage"
+        :page-count="pageCount"
+        @nextPage="pageChangeHandle('next')"
+        @previousPage="pageChangeHandle('previous')"
+        @loadPage="pageChangeHandle"
+      ></pagination-template>
+    </div>
+    {{currentPage}} - {{pageCount}}
   </div>
 </template>
 
 <script>
 import { eventBus } from "../main";
+import Pagination from "./Pagination";
 
 export default {
   name: "templateContainer",
   props: ["templates"],
+  components: {
+    "pagination-template": Pagination
+  },
   data() {
     return {
+      currentPage: 0,
+      pageSize: 10,
+      pageCount: 1,
+      visibleTemplates: [],
       indexRow: {
         type: Number,
         default: null
@@ -102,8 +121,34 @@ export default {
       return str;
     },
 
+    pageChangeHandle(value) {
+      switch (value) {
+        case "next":
+          this.currentPage += 1;
+          break;
+        case "previous":
+          this.currentPage -= 1;
+          break;
+        default:
+          this.currentPage = value;
+      }
+
+      const from = this.currentPage * this.pageSize;
+      const to = from + this.pageSize;
+      this.visibleTemplates = this.templates.slice(from, to);
+    },
+
     sendData() {
       eventBus.makeOrder();
+    },
+    getTemp() {}
+  },
+  watch: {
+    templates: function() {
+      const from = this.currentPage * this.pageSize;
+      const to = from + this.pageSize;
+      this.visibleTemplates = this.templates.slice(from, to);
+      this.pageCount = Math.ceil(this.templates.length / this.pageSize);
     }
   }
 };

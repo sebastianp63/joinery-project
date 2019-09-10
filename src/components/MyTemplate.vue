@@ -23,8 +23,8 @@
         <template-container :templates="templates" @removeRow="removeTemplate($event)" />
       </div>
     </div>
-    <p>{{templateData.id}}</p>
-    {{templates}}
+    <!-- <p>{{templateData.id}}</p>
+    {{templates}}-->
   </div>
 </template>
 
@@ -81,15 +81,14 @@ export default {
 
   methods: {
     onTemplateUpdate(data) {
-      this.templateData.width = data.width;
-      this.templateData.height = data.height;
+      this.templateData.width = parseInt(data.width);
+      this.templateData.height = parseInt(data.height);
       this.templateData.unit = data.units;
       this.templateData.veneer.top = data.glue.includes("t");
       this.templateData.veneer.bottom = data.glue.includes("b");
       this.templateData.veneer.left = data.glue.includes("l");
       this.templateData.veneer.right = data.glue.includes("r");
       // Webpack proxy API
-
       // axios.post('url', order).then((data) => {
       //   alert('Saved')
       // })
@@ -118,7 +117,6 @@ export default {
     removeTemplate: function(index) {
       const indexItemToRemove = index - 1;
       this.templates.splice(indexItemToRemove, 1);
-      debugger;
       this.templateData.id = index;
       for (let i = indexItemToRemove; i < this.templates.length; i++) {
         this.templates[i].id = this.templateData.id;
