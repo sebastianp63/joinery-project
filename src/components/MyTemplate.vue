@@ -3,6 +3,10 @@
     class="border-template .uk-background-default uk-align-center uk-padding-small uk-margin-medium-left uk-margin-medium-right"
     style=" min-height: 85vh"
   >
+    <div v-if="success" class="uk-alert-success" uk-alert>
+      <a class="uk-alert-close" uk-close></a>
+      <p>Data send correctly</p>
+    </div>
     <div class="uk-grid-small uk-child-width-expand@s uk-height-1-1" uk-grid>
       <div class="uk-width-1-3@m">
         <div>
@@ -55,6 +59,7 @@ export default {
   data: function() {
     return {
       shown: false,
+      success: false,
       templates: [],
       templateData: {
         id: 1,
@@ -97,7 +102,7 @@ export default {
     },
 
     addNewTemplate: function() {
-      if(this.templates.length < 100){
+      if (this.templates.length < 100) {
         if (this.templateData.height == 0 || this.templateData.width == 0) {
           console.log("Cannot add template with no dimension");
         } else {
@@ -128,29 +133,29 @@ export default {
 
   mounted() {
     eventBus.$on("makeOrder", () => {
+      this.success = false;
       let obj = {};
       if (
         this.firstName === "" ||
         this.firstName.length < 3 ||
         this.lastName === "" ||
-        this.lastName.length < 3 || _.isEmpty(this.templates)  
+        this.lastName.length < 3 ||
+        _.isEmpty(this.templates)
       ) {
         console.log("invalid user data");
-      }
-      else {
-      obj.firstName = this.firstName;
-      obj.lastName = this.lastName;
-      obj.templates = this.templates;
-      let order = JSON.stringify(obj);
+      } else {
+        obj.firstName = this.firstName;
+        obj.lastName = this.lastName;
+        obj.templates = this.templates;
+        let order = JSON.stringify(obj);
 
-      console.log(order);
-
-      axios
-        .post("/api/save/order", order)
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {});
+        axios
+          .post("/api/save/order", order)
+          .then(response => {
+            console.log(response);
+            this.success = true;
+          })
+          .catch(function(error) {});
       }
     });
   }
@@ -173,7 +178,8 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to  {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

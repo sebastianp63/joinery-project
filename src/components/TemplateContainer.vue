@@ -29,7 +29,10 @@
             <div class="uk-width-auto">
               <ul class="uk-hidden-hover uk-iconnav uk-transition-fade">
                 <li>
-                  <a href="#" uk-icon="icon: pencil"></a>
+                  <router-link
+                    uk-icon="icon: pencil"
+                    :to="{ name: 'edit', params: { id: item.id }}"
+                  ></router-link>
                 </li>
                 <li>
                   <a
@@ -135,7 +138,6 @@ export default {
       const from = (this.currentPage - 1) * this.pageSize;
       const to = from + this.pageSize;
       this.visibleTemplates = this.templates.slice(from, to);
-
     },
 
     sendData() {
@@ -143,7 +145,7 @@ export default {
     },
     getTemp() {}
   },
-  
+
   watch: {
     templates: function() {
       const from = (this.currentPage - 1) * this.pageSize;
