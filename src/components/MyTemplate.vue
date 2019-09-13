@@ -7,10 +7,15 @@
       <a class="uk-alert-close" uk-close></a>
       <p>Data send correctly</p>
     </div>
+
     <div class="uk-grid-small uk-child-width-expand@s uk-height-1-1" uk-grid>
       <div class="uk-width-1-3@m">
         <div>
-          <template-form @showPreview="isShowedPreview = $event " @onUpdated="onTemplateUpdate">
+          <template-form
+            :title="'Create your template'"
+            @showPreview="isShowedPreview = $event "
+            @onUpdated="onTemplateUpdate"
+          >
             <my-button
               :text="isShowedPreview ? 'Hide Preview': 'Show Preview'"
               @clickEvent="showPreview"
@@ -36,7 +41,7 @@
 import TemplateForm from "@/components/TemplateForm.vue";
 import TemplateContainer from "@/components/TemplateContainer.vue";
 import TemplatePreview from "@/components/TemplatePreview.vue";
-import MyButton from "./formButtons/myButton";
+import MyButton from "./formButtons/MyButton";
 
 import { eventBus } from "../main";
 
@@ -88,13 +93,7 @@ export default {
 
   methods: {
     onTemplateUpdate(data) {
-      this.templateData.width = parseInt(data.width);
-      this.templateData.height = parseInt(data.height);
-      this.templateData.unit = data.units;
-      this.templateData.veneer.top = data.glue.includes("t");
-      this.templateData.veneer.bottom = data.glue.includes("b");
-      this.templateData.veneer.left = data.glue.includes("l");
-      this.templateData.veneer.right = data.glue.includes("r");
+      this.templateData = { id: this.templateData.id, ...data };
     },
 
     showPreview(event) {

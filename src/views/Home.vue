@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div>
     <user-header @inputFirstName="firstName = $event" @inputLastName="lastName = $event" />
     <my-template :firstName="firstName" :lastName="lastName" />
   </div>

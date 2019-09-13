@@ -26,7 +26,6 @@ export default {
 
   methods: {
     clickEvent(event) {
-      console.log("clicked");
       this.$emit("clickEvent");
     }
   }

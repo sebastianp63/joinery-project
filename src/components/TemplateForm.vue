@@ -1,7 +1,7 @@
 <template>
   <div class="uk-card uk-card-default uk-card-body">
     <div class="uk-tile uk-tile-secondary uk-padding-small uk-margin-medium-bottom">
-      <p class="uk-h4">Create your template</p>
+      <p class="uk-h4">{{title}}</p>
     </div>
     <form class="uk-form-stacked">
       <div class="uk-margin">
@@ -38,8 +38,8 @@
               class="uk-radio"
               type="radio"
               name="radio-unit"
-              :checked="state.units === 'cm'"
-              @input="state.units='cm'"
+              :checked="state.unit === 'cm'"
+              @input="state.unit='cm'"
             /> [ cm ]
           </label>
           <label>
@@ -47,8 +47,8 @@
               class="uk-radio"
               type="radio"
               name="radio-unit"
-              :checked="state.units === 'mm'"
-              @input="state.units='mm'"
+              :checked="state.unit === 'mm'"
+              @input="state.unit='mm'"
             /> [ mm ]
           </label>
         </div>
@@ -61,7 +61,7 @@
             <input
               class="uk-checkbox"
               type="checkbox"
-              :checked="state.glue.includes('t')"
+              :checked="state.veneer.top"
               @input="setGlue('t')"
             /> Top
           </label>
@@ -69,7 +69,7 @@
             <input
               class="uk-checkbox"
               type="checkbox"
-              :checked="state.glue.includes('b')"
+              :checked="state.veneer.bottom"
               @input="setGlue('b')"
             /> Bottom
           </label>
@@ -77,7 +77,7 @@
             <input
               class="uk-checkbox"
               type="checkbox"
-              :checked="state.glue.includes('l')"
+              :checked="state.veneer.left"
               @input="setGlue('l')"
             /> Left
           </label>
@@ -85,7 +85,7 @@
             <input
               class="uk-checkbox"
               type="checkbox"
-              :checked="state.glue.includes('r')"
+              :checked="state.veneer.right"
               @input="setGlue('r')"
             /> Right
           </label>
@@ -100,8 +100,20 @@
 </template>
 
 <script>
-import MyButton from "./formButtons/myButton";
+import _ from "lodash";
 export default {
+  props: {
+    template: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    },
+    title: {
+      type: String,
+      required: true
+    }
+  },
   name: "templateForm",
   data() {
     return {
@@ -111,13 +123,24 @@ export default {
         maxWidthForMm: 2800,
         maxHeightForMm: 2070
       },
+      glue: "",
       state: {
         width: 100,
         height: 100,
-        units: "mm",
-        glue: ""
+        veneer: {
+          top: false,
+          bottom: false,
+          left: false,
+          right: false
+        },
+        unit: "mm"
       }
     };
+  },
+  created() {
+    if (!_.isEmpty(this.template)) {
+      this.state = this.template;
+    }
   },
   watch: {
     state: {
@@ -167,13 +190,18 @@ export default {
   },
   methods: {
     setGlue(glue) {
-      const v = new Set(this.state.glue);
-      if (this.state.glue.includes(glue)) {
+      const v = new Set(this.glue);
+      if (this.glue.includes(glue)) {
         v.delete(glue);
       } else {
         v.add(glue);
       }
-      this.state.glue = Array.from(v.values()).join("");
+      this.glue = Array.from(v.values()).join("");
+
+      this.state.veneer.top = this.glue.includes("t");
+      this.state.veneer.bottom = this.glue.includes("b");
+      this.state.veneer.left = this.glue.includes("l");
+      this.state.veneer.right = this.glue.includes("r");
     },
 
     isNumber($event) {
