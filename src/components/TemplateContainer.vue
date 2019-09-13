@@ -28,12 +28,9 @@
           <td>
             <div class="uk-width-auto">
               <ul class="uk-hidden-hover uk-iconnav uk-transition-fade">
-                <li>
-                  <router-link
-                    uk-icon="icon: pencil"
-                    :to="{ name: 'edit', params: { id: item.id }}"
-                  ></router-link>
-                </li>
+                <router-link tag="li" :to="{ name: 'edit', params: { id: item.id, template: item}}">
+                  <a uk-icon="icon: pencil"></a>
+                </router-link>
                 <li>
                   <a
                     @click="indexRow = item.id"
@@ -106,15 +103,13 @@ export default {
   methods: {
     formatGlue(data) {
       let str = "";
-      Object.keys(data).forEach(function(key) {
+      Object.keys(data).forEach(key => {
         if (data[key] === true) {
-          str =
-            str +
+          str = `${str +
             key
               .toString()
               .charAt(0)
-              .toUpperCase() +
-            "-";
+              .toUpperCase()}-`;
         }
       });
       if (str.charAt(str.length - 1) == "-") {
@@ -143,11 +138,19 @@ export default {
     sendData() {
       eventBus.makeOrder();
     },
-    getTemp() {}
+
+    getTemplate(index) {
+      let template = this.templates.filter(item => {
+        if (item.id === index) {
+          return item;
+        }
+        return template;
+      });
+    }
   },
 
   watch: {
-    templates: function() {
+    templates() {
       const from = (this.currentPage - 1) * this.pageSize;
       const to = from + this.pageSize;
       this.visibleTemplates = this.templates.slice(from, to);

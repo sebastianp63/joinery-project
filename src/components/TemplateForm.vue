@@ -94,23 +94,17 @@
     </form>
 
     <div class="button-wraper">
-      <button
-        @click="showPreview"
-        class="uk-button uk-button-primary"
-      >{{ isShowedPreview ? "Hide Preview": "Show Preview"}}</button>
-      <button @click="addTemplate" class="uk-button uk-button-secondary">Add template</button>
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <script>
-import { eventBus } from "../main";
-
+import MyButton from "./formButtons/myButton";
 export default {
   name: "templateForm",
   data() {
     return {
-      isShowedPreview: false,
       validateData: {
         maxWidthForCm: 280,
         maxHeightForCm: 207,
@@ -128,9 +122,6 @@ export default {
   watch: {
     state: {
       handler(old, val) {
-        const reg = new RegExp("^([1-9]|[1-9]d+)$");
-        const test = reg.test(val.height);
-
         if (val.height < 0) {
           val.height = 0;
         }
@@ -176,8 +167,7 @@ export default {
   },
   methods: {
     setGlue(glue) {
-      let v = new Set(this.state.glue);
-
+      const v = new Set(this.state.glue);
       if (this.state.glue.includes(glue)) {
         v.delete(glue);
       } else {
@@ -185,15 +175,9 @@ export default {
       }
       this.state.glue = Array.from(v.values()).join("");
     },
-    addTemplate: function(event) {
-      this.$emit("addTemplate");
-    },
-    showPreview: function(event) {
-      this.isShowedPreview = !this.isShowedPreview;
-      this.$emit("showPreview", this.isShowedPreview);
-    },
+
     isNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      const keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if (keyCode < 48 || keyCode > 57) {
         $event.preventDefault();
       }

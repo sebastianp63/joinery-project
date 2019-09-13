@@ -7,13 +7,13 @@ Vue.config.productionTip = false;
 export const eventBus = new Vue({
   methods: {
     makeOrder() {
-      this.$emit("makeOrder");
+      this.$emit('makeOrder');
     },
     showPreview() {
-      this.$emit("showPreview");
-    }
+      this.$emit('showPreview');
+    },
 
-  }
+  },
 });
 
 new Vue({

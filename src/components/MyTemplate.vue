@@ -10,15 +10,17 @@
     <div class="uk-grid-small uk-child-width-expand@s uk-height-1-1" uk-grid>
       <div class="uk-width-1-3@m">
         <div>
-          <template-form
-            @showPreview="shown = $event "
-            @onUpdated="onTemplateUpdate"
-            @addTemplate="addNewTemplate"
-          />
+          <template-form @showPreview="isShowedPreview = $event " @onUpdated="onTemplateUpdate">
+            <my-button
+              :text="isShowedPreview ? 'Hide Preview': 'Show Preview'"
+              @clickEvent="showPreview"
+            ></my-button>
+            <my-button :text="'Add template'" :secondary="true" @clickEvent="addNewTemplate"></my-button>
+          </template-form>
         </div>
         <div class="uk-margin-top">
           <transition name="fade">
-            <template-preview v-show="shown" v-bind:templateData="templateData"></template-preview>
+            <template-preview v-show="isShowedPreview" v-bind:templateData="templateData"></template-preview>
           </transition>
         </div>
       </div>
@@ -34,6 +36,7 @@
 import TemplateForm from "@/components/TemplateForm.vue";
 import TemplateContainer from "@/components/TemplateContainer.vue";
 import TemplatePreview from "@/components/TemplatePreview.vue";
+import MyButton from "./formButtons/myButton";
 
 import { eventBus } from "../main";
 
@@ -56,9 +59,9 @@ export default {
   },
 
   name: "MyTemplate",
-  data: function() {
+  data() {
     return {
-      shown: false,
+      isShowedPreview: false,
       success: false,
       templates: [],
       templateData: {
@@ -77,6 +80,7 @@ export default {
   },
 
   components: {
+    myButton: MyButton,
     templateForm: TemplateForm,
     templateContainer: TemplateContainer,
     templatePreview: TemplatePreview
@@ -91,24 +95,25 @@ export default {
       this.templateData.veneer.bottom = data.glue.includes("b");
       this.templateData.veneer.left = data.glue.includes("l");
       this.templateData.veneer.right = data.glue.includes("r");
-      // Webpack proxy API
-      // axios.post('url', order).then((data) => {
-      //   alert('Saved')
-      // })
     },
 
-    emitData: function() {
+    showPreview(event) {
+      this.isShowedPreview = !this.isShowedPreview;
+      this.$emit("showPreview", this.isShowedPreview);
+    },
+
+    emitData() {
       this.$emit("emitData", this.templateData);
     },
 
-    addNewTemplate: function() {
+    addNewTemplate() {
       if (this.templates.length < 100) {
         if (this.templateData.height == 0 || this.templateData.width == 0) {
           console.log("Cannot add template with no dimension");
         } else {
-          let exist = this.templates.filter(el => {
-            return el.id == this.templateData.id;
-          });
+          const exist = this.templates.filter(
+            el => el.id == this.templateData.id
+          );
           if (!exist.length > 0) {
             this.templates.push(_.cloneDeep(this.templateData));
           } else {
@@ -119,14 +124,15 @@ export default {
       }
     },
 
-    removeTemplate: function(index) {
+    removeTemplate(index) {
       const indexItemToRemove = index - 1;
       this.templates.splice(indexItemToRemove, 1);
       this.templateData.id = index;
       for (let i = indexItemToRemove; i < this.templates.length; i++) {
         this.templates[i].id = this.templateData.id;
-        if (this.templateData.id <= this.templates.length)
+        if (this.templateData.id <= this.templates.length) {
           this.templateData.id++;
+        }
       }
     }
   },
@@ -134,7 +140,7 @@ export default {
   mounted() {
     eventBus.$on("makeOrder", () => {
       this.success = false;
-      let obj = {};
+      const obj = {};
       if (
         this.firstName === "" ||
         this.firstName.length < 3 ||
@@ -147,7 +153,7 @@ export default {
         obj.firstName = this.firstName;
         obj.lastName = this.lastName;
         obj.templates = this.templates;
-        let order = JSON.stringify(obj);
+        const order = JSON.stringify(obj);
 
         axios
           .post("/api/save/order", order)
@@ -155,7 +161,7 @@ export default {
             console.log(response);
             this.success = true;
           })
-          .catch(function(error) {});
+          .catch(error => {});
       }
     });
   }

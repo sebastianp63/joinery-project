@@ -8,12 +8,12 @@
 <script>
 // @ is an alias to /src
 
-import MyTemplate from "../components/MyTemplate";
-import UserHeader from "../components/UserHeader";
+import MyTemplate from "../components/MyTemplate.vue";
+import UserHeader from "../components/UserHeader.vue";
 
 export default {
   name: "home",
-  data: function() {
+  data() {
     return {
       firstName: "",
       lastName: ""
@@ -27,8 +27,3 @@ export default {
 </script>
 
 
-<template v-if="ok">
-  <h1>Title</h1>
-  <p>Paragraph 1</p>
-  <p>Paragraph 2</p>
-</template>

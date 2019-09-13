@@ -19,7 +19,7 @@
         </div>
         <div
           class="bord center"
-          v-bind:class="{ 
+          v-bind:class="{
       'top-border': templateData.veneer.top ,
       'bottom-border': templateData.veneer.bottom,
       'left-border':templateData.veneer.left ,
@@ -34,9 +34,9 @@
 <script>
 export default {
   props: {
-    templateData: Object
+    templateData: Object,
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

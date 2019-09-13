@@ -26,26 +26,27 @@
 </template>
 
 <script>
-import BasePaginationTrigger from "./BasePaginationTrigger";
+import BasePaginationTrigger from './BasePaginationTrigger';
 
-const _ = require("lodash");
+const _ = require('lodash');
+
 export default {
   props: {
     visiblePagesCount: {
       type: Number,
-      default: 5
+      default: 5,
     },
     currentPage: {
       type: Number,
-      required: true
+      required: true,
     },
     pageCount: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    BasePaginationTrigger
+    BasePaginationTrigger,
   },
   computed: {
     isPreviousButtonDisabled() {
@@ -55,68 +56,60 @@ export default {
       return !(this.currentPage === this.pageCount);
     },
     paginationTriggers() {
-      if(this.pageCount >= this.visiblePagesCount){
-
-        const currentPage = this.currentPage;
-        const pageCount = this.pageCount;
-        const visiblePagesCount = this.visiblePagesCount;
+      if (this.pageCount >= this.visiblePagesCount) {
+        const { currentPage } = this;
+        const { pageCount } = this;
+        const { visiblePagesCount } = this;
         const visiblePagesThreshold = (visiblePagesCount - 1) / 2;
         const pagintationTriggersArray = Array(this.visiblePagesCount - 1).fill(
-          0
+          0,
         );
-  
+
         if (currentPage <= visiblePagesThreshold + 1) {
           pagintationTriggersArray[0] = 1;
           const pagintationTriggers = pagintationTriggersArray.map(
-            (paginationTrigger, index) => {
-              return pagintationTriggersArray[0] + index;
-            }
+            (paginationTrigger, index) => pagintationTriggersArray[0] + index,
           );
-  
+
           pagintationTriggers.push(pageCount);
-  
+
           return pagintationTriggers;
         }
-  
+
         if (currentPage >= pageCount - visiblePagesThreshold + 1) {
           const pagintationTriggers = pagintationTriggersArray.map(
-            (paginationTrigger, index) => {
-              return pageCount - index;
-            }
+            (paginationTrigger, index) => pageCount - index,
           );
-  
+
           pagintationTriggers.reverse().unshift(1);
-  
+
           return pagintationTriggers;
         }
-      
 
-      pagintationTriggersArray[0] = currentPage - visiblePagesThreshold + 1;
-      const pagintationTriggers = pagintationTriggersArray.map(
-        (paginationTrigger, index) => {
-          return pagintationTriggersArray[0] + index;
-        }
-      );
 
-      pagintationTriggers.unshift(1);
-      pagintationTriggers[pagintationTriggers.length - 1] = pageCount;
+        pagintationTriggersArray[0] = currentPage - visiblePagesThreshold + 1;
+        const pagintationTriggers = pagintationTriggersArray.map(
+          (paginationTrigger, index) => pagintationTriggersArray[0] + index,
+        );
 
-      return pagintationTriggers;
-      }         else return ([...Array(this.pageCount).keys()].map(x => x=x+1))
+        pagintationTriggers.unshift(1);
+        pagintationTriggers[pagintationTriggers.length - 1] = pageCount;
 
-    }
+        return pagintationTriggers;
+      } return ([...Array(this.pageCount).keys()].map(x => x += 1));
+    },
   },
   methods: {
     nextPage() {
-      this.$emit("nextPage");
+      this.$emit('nextPage');
     },
     previousPage() {
-      this.$emit("previousPage");
+      this.$emit('previousPage');
     },
     onLoadPage(value) {
-      this.$emit("loadPage", value);
-    }
-  }
+      this.$emit('loadPage', value);
+    },
+  },
 };
 </script>
 

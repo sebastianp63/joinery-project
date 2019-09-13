@@ -45,43 +45,43 @@
 
 <script>
 export default {
-  name: "UserHeader",
+  name: 'UserHeader',
   data() {
     return {
-      firstName: "",
-      lastName: "",
+      firstName: '',
+      lastName: '',
       incorrectFirtName: false,
-      incorrectLastName: false
+      incorrectLastName: false,
     };
   },
   methods: {
     getFirstName() {
-      var letters = /^[A-Za-z]+$/;
+      const letters = /^[A-Za-z]+$/;
       if (this.firstName.match(letters)) {
         this.$emit(
-          "inputFirstName",
-          this.firstName.charAt(0).toUpperCase() + this.firstName.slice(1)
+          'inputFirstName',
+          this.firstName.charAt(0).toUpperCase() + this.firstName.slice(1),
         );
         this.incorrectFirtName = false;
       } else {
-        this.$emit("inputFirstName", "");
+        this.$emit('inputFirstName', '');
         this.incorrectFirtName = true;
       }
     },
     getLastName() {
-      var letters = /^[A-Za-z]+$/;
+      const letters = /^[A-Za-z]+$/;
       if (this.lastName.match(letters)) {
         this.$emit(
-          "inputLastName",
-          this.lastName.charAt(0).toUpperCase() + this.lastName.slice(1)
+          'inputLastName',
+          this.lastName.charAt(0).toUpperCase() + this.lastName.slice(1),
         );
         this.incorrectLastName = false;
       } else {
-        this.$emit("inputLastName", "");
+        this.$emit('inputLastName', '');
         this.incorrectLastName = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
