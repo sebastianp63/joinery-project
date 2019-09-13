@@ -44,7 +44,7 @@ import TemplatePreview from "@/components/TemplatePreview.vue";
 import MyButton from "./formButtons/MyButton";
 
 import { eventBus } from "../main";
-
+const fs = require("browserify-fs");
 const _ = require("lodash");
 const axios = require("axios");
 
@@ -121,6 +121,12 @@ export default {
           this.templateData.id += 1;
         }
       }
+      const storage = JSON.stringify(this.templates);
+      window.localStorage.setItem("storage", storage);
+      console.log(JSON.parse(window.localStorage.getItem("storage")));
+      // fs.writeFile("storage.txt", "storage", "utf8", err => {
+      //   if (err) throw err;
+      // });
     },
 
     removeTemplate(index) {
@@ -163,6 +169,21 @@ export default {
           .catch(error => {});
       }
     });
+  },
+  // watch: {
+  //   $route(to, from) {
+  //     console.log(JSON.parse(window.localStorage.getItem("storage")));
+  //     this.templates = JSON.parse(window.localStorage.getItem("storage"));
+  //     this.templateData.id = this.templates[this.templates.length - 1].id + 1;
+  //   }
+  // },
+  beforeRouteUpdate(to, from, next) {
+    console.log(JSON.parse(window.localStorage.getItem("storage")));
+    this.templates = JSON.parse(window.localStorage.getItem("storage"));
+    this.templateData.id = this.templates[this.templates.length - 1].id + 1;
+    // react to route changes...
+    // don't forget to call next()
+    next();
   }
 };
 </script>
