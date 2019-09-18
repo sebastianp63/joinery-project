@@ -4,13 +4,15 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>-->
-    <router-view></router-view>
+    <keep-alive include="home">
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 
 <script>
-import UIkit from 'uikit';
-import Icons from 'uikit/dist/js/uikit-icons';
+import UIkit from "uikit";
+import Icons from "uikit/dist/js/uikit-icons";
 
 UIkit.use(Icons);
 

@@ -140,6 +140,14 @@ export default {
   created() {
     if (!_.isEmpty(this.template)) {
       this.state = this.template;
+      const veneer = this.template.veneer;
+      for (let key in veneer) {
+        if (veneer.hasOwnProperty(key)) {
+          if (veneer[key]) {
+            this.glue += key.charAt(0);
+          }
+        }
+      }
     }
   },
   watch: {
@@ -161,24 +169,24 @@ export default {
           val.height = "";
         }
 
-        if (val.width > this.validateData.maxWidthForCm && val.units === "cm") {
+        if (val.width > this.validateData.maxWidthForCm && val.unit === "cm") {
           val.width = this.validateData.maxWidthForCm;
         }
 
         if (
           val.height > this.validateData.maxHeightForCm &&
-          val.units === "cm"
+          val.unit === "cm"
         ) {
           val.height = this.validateData.maxHeightForCm;
         }
 
-        if (val.width > this.validateData.maxWidthForMm && val.units === "mm") {
+        if (val.width > this.validateData.maxWidthForMm && val.unit === "mm") {
           val.width = this.validateData.maxWidthForMm;
         }
 
         if (
           val.height > this.validateData.maxHeightForMm &&
-          val.units === "mm"
+          val.unit === "mm"
         ) {
           val.height = this.validateData.maxHeightForMm;
         }

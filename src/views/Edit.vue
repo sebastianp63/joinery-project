@@ -9,7 +9,9 @@
     <div class="uk-grid-small uk-child-width-expand@s uk-height-1-1" uk-grid>
       <div class="uk-width-1-3@m">
         <template-form :title="'Edit template'" :template="template">
-          <my-button :text="'Edit'" :secondary="true"></my-button>
+          <router-link :to="{name: 'home' }">
+            <my-button :text="'Edit'" :secondary="true" @clickEvent="editTemplate"></my-button>
+          </router-link>
           <router-link to="/">Back to home</router-link>
         </template-form>
       </div>
@@ -24,6 +26,7 @@
 import TemplateForm from "../components/TemplateForm";
 import TemplatePreview from "../components/TemplatePreview";
 import MyButton from "../components/formButtons/MyButton";
+import { eventBus } from "../main";
 
 export default {
   props: ["template"],
@@ -31,6 +34,11 @@ export default {
     templateForm: TemplateForm,
     templatePreview: TemplatePreview,
     myButton: MyButton
+  },
+  methods: {
+    editTemplate() {
+      eventBus.editTemplate(this.template);
+    }
   }
 };
 </script>

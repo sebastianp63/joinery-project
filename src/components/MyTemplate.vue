@@ -48,8 +48,6 @@ const fs = require("browserify-fs");
 const _ = require("lodash");
 const axios = require("axios");
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
-
 export default {
   props: {
     id: Number,
@@ -168,6 +166,14 @@ export default {
           })
           .catch(error => {});
       }
+    });
+  },
+  created() {
+    eventBus.$on("editTemplate", data => {
+      const index = data.id;
+      this.templates = this.templates.map(function(template) {
+        return template.id == index ? data : template;
+      });
     });
   },
   // watch: {
