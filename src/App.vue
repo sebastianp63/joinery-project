@@ -4,34 +4,26 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>-->
-    <router-view />
+    <keep-alive include="home">
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import UIkit from "uikit";
 import Icons from "uikit/dist/js/uikit-icons";
-UIkit.use(Icons);
+
 UIkit.use(Icons);
 
 export default {};
 </script>
 
 <style lang="scss">
-// 1. Your custom variables and variable overwrites.
-$global-link-color: #da7d02;
-
-// 2. Import default variables and available mixins.
 @import "../node_modules/uikit/src/scss/variables-theme.scss";
 @import "../node_modules/uikit/src/scss/mixins-theme.scss";
-
-// 3. Your custom mixin overwrites.
-@mixin hook-card() {
-  color: #000;
-}
-
-// 4. Import UIkit.
 @import "../node_modules/uikit/src/scss/uikit-theme.scss";
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -50,12 +42,12 @@ $global-link-color: #da7d02;
   }
 }
 
-// html {
-//   opacity: 0.99;
-//   background: url("./assets/home.jpg") no-repeat center center fixed;
-//   -webkit-background-size: cover;
-//   -moz-background-size: cover;
-//   -o-background-size: cover;
-//   background-size: cover;
-// }
+html {
+  opacity: 0.99;
+  background: url("./assets/home.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 </style>

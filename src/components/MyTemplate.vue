@@ -1,33 +1,74 @@
 <template>
   <div
-    class="uk-margin-small-left uk-margin-small-right border-template .uk-background-default uk-align-center uk-padding-small"
+    class="border-template .uk-background-default uk-align-center uk-padding-small uk-margin-medium-left uk-margin-medium-right"
+    style=" min-height: 85vh"
   >
-    <div class="uk-child-width-expand@s uk-text-center" uk-grid>
+    <div v-if="success" class="uk-alert-success" uk-alert>
+      <a class="uk-alert-close" uk-close></a>
+      <p>Data send correctly</p>
+    </div>
+
+    <div class="uk-grid-small uk-child-width-expand@s uk-height-1-1" uk-grid>
       <div class="uk-width-1-3@m">
-        <template-form @onUpdated="onTemplateUpdate" @addTemplate="addNewTemplate()" />
+        <div>
+          <template-form
+            :title="'Create your template'"
+            @showPreview="isShowedPreview = $event "
+            @onUpdated="onTemplateUpdate"
+          >
+            <my-button
+              :text="isShowedPreview ? 'Hide Preview': 'Show Preview'"
+              @clickEvent="showPreview"
+            ></my-button>
+            <my-button :text="'Add template'" :secondary="true" @clickEvent="addNewTemplate"></my-button>
+          </template-form>
+        </div>
+        <div class="uk-margin-top">
+          <transition name="fade">
+            <template-preview v-show="isShowedPreview" v-bind:templateData="templateData"></template-preview>
+          </transition>
+        </div>
       </div>
-      <div class="uk-width-expand@m">
-        <template-container :templates="templates" />
+
+      <div style="height:1033px">
+        <template-container :templates="templates" @removeRow="removeTemplate($event)" />
       </div>
     </div>
-    {{templateData}}
-    <div>{{templates}}</div>
   </div>
 </template>
 
 <script>
 import TemplateForm from "@/components/TemplateForm.vue";
 import TemplateContainer from "@/components/TemplateContainer.vue";
+import TemplatePreview from "@/components/TemplatePreview.vue";
+import MyButton from "./formButtons/MyButton";
+
+import { eventBus } from "../main";
+const fs = require("browserify-fs");
+const _ = require("lodash");
+const axios = require("axios");
 
 export default {
   props: {
-    id: Number
+    id: Number,
+    firstName: {
+      type: String,
+      default: ""
+    },
+    lastName: {
+      type: String,
+      default: ""
+    }
   },
+
   name: "MyTemplate",
-  data: function() {
+  data() {
     return {
-      index: 1,
+      isShowedPreview: false,
+      success: false,
+      templates: [],
       templateData: {
+        id: 1,
         width: 100,
         height: 100,
         veneer: {
@@ -37,36 +78,118 @@ export default {
           right: false
         },
         unit: "mm"
-      },
-      templates: []
+      }
     };
   },
+
   components: {
+    myButton: MyButton,
     templateForm: TemplateForm,
-    templateContainer: TemplateContainer
+    templateContainer: TemplateContainer,
+    templatePreview: TemplatePreview
   },
+
   methods: {
     onTemplateUpdate(data) {
-      this.templateData.width = data.width;
-      this.templateData.height = data.height;
-      this.templateData.unit = data.units;
-      this.templateData.veneer.top = data.glue.includes("t");
-      this.templateData.veneer.bottom = data.glue.includes("b");
-      this.templateData.veneer.left = data.glue.includes("l");
-      this.templateData.veneer.right = data.glue.includes("r");
-      console.log(this.templateData);
-      // Webpack proxy API
+      this.templateData = { id: this.templateData.id, ...data };
+    },
 
-      // axios.post('url', order).then((data) => {
-      //   alert('Saved')
-      // })
+    showPreview(event) {
+      this.isShowedPreview = !this.isShowedPreview;
+      this.$emit("showPreview", this.isShowedPreview);
+    },
+
+    emitData() {
+      this.$emit("emitData", this.templateData);
     },
 
     addNewTemplate() {
-      this.templates.push({ id: this.index, template: this.templateData });
-      // this.$set(this.templates, this.index, this.templateData);
-      this.index += 1;
+      if (this.templates.length < 100) {
+        if (this.templateData.height == 0 || this.templateData.width == 0) {
+          console.log("Cannot add template with no dimension");
+        } else {
+          const exist = this.templates.filter(
+            el => el.id == this.templateData.id
+          );
+          if (!exist.length > 0) {
+            this.templates.push(_.cloneDeep(this.templateData));
+          } else {
+            console.log("this themplate has been already exist");
+          }
+          this.templateData.id += 1;
+        }
+      }
+      const storage = JSON.stringify(this.templates);
+      window.localStorage.setItem("storage", storage);
+      console.log(JSON.parse(window.localStorage.getItem("storage")));
+      // fs.writeFile("storage.txt", "storage", "utf8", err => {
+      //   if (err) throw err;
+      // });
+    },
+
+    removeTemplate(index) {
+      const indexItemToRemove = index - 1;
+      this.templates.splice(indexItemToRemove, 1);
+      this.templateData.id = index;
+      for (let i = indexItemToRemove; i < this.templates.length; i++) {
+        this.templates[i].id = this.templateData.id;
+        if (this.templateData.id <= this.templates.length) {
+          this.templateData.id++;
+        }
+      }
     }
+  },
+
+  mounted() {
+    eventBus.$on("makeOrder", () => {
+      this.success = false;
+      const obj = {};
+      if (
+        this.firstName === "" ||
+        this.firstName.length < 3 ||
+        this.lastName === "" ||
+        this.lastName.length < 3 ||
+        _.isEmpty(this.templates)
+      ) {
+        console.log("invalid user data");
+      } else {
+        obj.firstName = this.firstName;
+        obj.lastName = this.lastName;
+        obj.templates = this.templates;
+        const order = JSON.stringify(obj);
+
+        axios
+          .post("/api/save/order", order)
+          .then(response => {
+            console.log(response);
+            this.success = true;
+          })
+          .catch(error => {});
+      }
+    });
+  },
+  created() {
+    eventBus.$on("editTemplate", data => {
+      const index = data.id;
+      this.templates = this.templates.map(function(template) {
+        return template.id == index ? data : template;
+      });
+    });
+  },
+  // watch: {
+  //   $route(to, from) {
+  //     console.log(JSON.parse(window.localStorage.getItem("storage")));
+  //     this.templates = JSON.parse(window.localStorage.getItem("storage"));
+  //     this.templateData.id = this.templates[this.templates.length - 1].id + 1;
+  //   }
+  // },
+  beforeRouteUpdate(to, from, next) {
+    console.log(JSON.parse(window.localStorage.getItem("storage")));
+    this.templates = JSON.parse(window.localStorage.getItem("storage"));
+    this.templateData.id = this.templates[this.templates.length - 1].id + 1;
+    // react to route changes...
+    // don't forget to call next()
+    next();
   }
 };
 </script>
@@ -77,5 +200,18 @@ export default {
 }
 * {
   box-sizing: border-box;
+}
+
+.max-h {
+  height: 100%;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
